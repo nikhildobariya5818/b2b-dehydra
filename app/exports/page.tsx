@@ -1,0 +1,15 @@
+import Link from "next/link";
+import { Icon } from "@/components/icon";
+import { CertificationLogos } from "@/components/brand";
+import { OpenMap } from "@/components/open-map";
+import { CTA, FeatureCard, ImagePanel, Metric, PageHero, SectionTitle } from "@/components/ui";
+
+export default function ExportsPage() { return <>
+  <PageHero eyebrow="International supply programs" title="Global Reach, Industrial Precision" text="Export-ready ingredients, documentation and logistics planning for food businesses across major world markets." image="/images/exports-1.png"><Link className="button accent" href="/contact">Discuss your market</Link></PageHero>
+  <section className="metrics-band"><div className="container metric-row"><Metric value="40+" label="countries supplied"/><Metric value="6" label="trade regions"/><Metric value="2" label="strategic port gateways"/><Metric value="98.6%" label="on-time dispatch"/></div></section>
+  <section className="section container export-map-layout"><div><SectionTitle eyebrow="Strategic trade corridors" title="Connected to high-volume global markets" text="Our western India location provides efficient port access for Europe, the Middle East, Africa, the Americas and Asia-Pacific."/><div className="region-list"><span>GCC & Middle East</span><span>European Union</span><span>North America</span><span>Africa</span><span>South-East Asia</span><span>Australia</span></div></div><OpenMap className="map-card"/></section>
+  <section className="section logistics"><div className="container"><SectionTitle center eyebrow="Logistics efficiency" title="Engineered for every mile of transit"/><div className="feature-grid"><FeatureCard icon="globe" title="Global compliance" text="Country-specific labeling, certificates and document packs."/><FeatureCard icon="shield" title="Customs readiness" text="Structured documentation supports efficient border clearance."/><FeatureCard icon="box" title="Transit protection" text="Moisture-barrier packaging and optimized container loading."/></div></div></section>
+  <section className="section container story-grid"><ImagePanel src="/images/exports-3.png" alt="Container ship handling international cargo"/><div><SectionTitle eyebrow="Ocean freight expertise" title="Predictable programs, not one-off shipments" text="We align production slots, packing formats, booking windows and documentation to support recurring procurement schedules."/><div className="check-list"><span><Icon name="check"/> FOB, CIF and CFR programs</span><span><Icon name="check"/> Full-container and consolidated loads</span><span><Icon name="check"/> Palletized or floor-loaded options</span><span><Icon name="check"/> Shipment milestone updates</span></div></div></section>
+  <section className="section container"><SectionTitle center eyebrow="Global quality seals" title="Ready for demanding destination markets"/><CertificationLogos items={["US FDA", "EU", "GSO", "HALAL", "ISO 22000"]}/></section>
+  <CTA title="Partner with a global supplier" text="Tell us your destination port, annual forecast and required incoterm for a tailored export proposal."/>
+  </>; }
