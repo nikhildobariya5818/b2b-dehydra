@@ -30,7 +30,7 @@ export function Header() {
         </Link>
         <nav className={open ? "nav-links open" : "nav-links"} aria-label="Main navigation">
           {links.map(([label, href]) => (
-            <Link key={href} className={pathname.startsWith(href) ? "active" : ""} href={href} onClick={() => setOpen(false)}>{label}</Link>
+            <Link key={href} className={pathname.startsWith(href) ? "active" : ""} href={href} onClick={() => setOpen(false)} aria-current={pathname.startsWith(href) ? "page" : undefined}>{label}</Link>
           ))}
           <Link className="button primary mobile-quote" href="/contact" onClick={() => setOpen(false)}>Request Quote</Link>
         </nav>

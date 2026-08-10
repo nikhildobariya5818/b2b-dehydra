@@ -5,10 +5,7 @@ import { Icon } from "./icon";
 export function Eyebrow({ children }: { children: React.ReactNode }) { return <p className="eyebrow">{children}</p>; }
 
 export function PageHero({ eyebrow, title, text, image, children, compact = false }: { eyebrow: string; title: string; text: string; image: string; children?: React.ReactNode; compact?: boolean }) {
-  return <section className={compact ? "page-hero compact" : "page-hero"}>
-    <Image src={image} alt="" fill priority sizes="100vw" className="cover-image"/>
-    <div className="hero-scrim"/><div className="container hero-content"><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{text}</p>{children}</div>
-  </section>;
+  return <section className={compact ? "page-hero compact" : "page-hero"}><div className="container page-hero-grid"><div className="page-hero-image"><Image src={image} alt={`${title} — De'Hydra Foods`} fill priority sizes="(max-width: 800px) 100vw, 48vw" className="cover-image"/></div><div className="hero-content"><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{text}</p>{children}</div></div></section>;
 }
 
 export function SectionTitle({ eyebrow, title, text, center = false }: { eyebrow?: string; title: string; text?: string; center?: boolean }) {
