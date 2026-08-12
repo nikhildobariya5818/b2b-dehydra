@@ -65,6 +65,7 @@ export const productsTable = pgTable("products", {
   specifications: json("specifications"),
   imageUrl: varchar("image_url", { length: 500 }),
   brochureUrl: varchar("brochure_url", { length: 500 }),
+  videoUrl: varchar("video_url", { length: 500 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

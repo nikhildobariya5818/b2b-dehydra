@@ -51,6 +51,7 @@ export async function createProduct(data: {
   specifications?: any;
   imageUrl?: string;
   brochureUrl?: string;
+  videoUrl?: string;
 }) {
   try {
     const result = await db.insert(productsTable).values(data).returning();
@@ -61,24 +62,20 @@ export async function createProduct(data: {
   }
 }
 
-export async function updateProduct(
-  id: string,
-  data: Partial<{
-    name: string;
-    slug: string;
-    category: string;
-    description: string;
-    specifications?: any;
-    imageUrl?: string;
-    brochureUrl?: string;
-  }>
-) {
+export async function updateProduct(id: string, data: Partial<{
+  name: string;
+  slug: string;
+  category: string;
+  description: string;
+  specifications: any;
+  imageUrl: string;
+  brochureUrl: string;
+  videoUrl: string;
+}>) {
   try {
-    const result = await db
-      .update(productsTable)
+    const result = await db.update(productsTable)
       .set({ ...data, updatedAt: new Date() })
-      .where(eq(productsTable.id, id))
-      .returning();
+      .where(eq(productsTable.id, id)).returning();
     return result[0];
   } catch (error) {
     console.error("[DB] Error updating product:", error);
