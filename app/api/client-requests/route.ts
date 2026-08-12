@@ -46,6 +46,8 @@ export async function POST(req: NextRequest) {
       interestedProducts, // Should be JSON string array
       estimatedVolume: estimatedVolume || undefined,
       message,
+      requestType: body.requestType || "general",
+      productId: body.productId || undefined,
     });
 
     // TODO: Send email notification to admin

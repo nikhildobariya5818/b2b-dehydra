@@ -28,16 +28,22 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { status, notes } = body;
+    const { status, notes, responseMessage, responseBrochureUrls } = body;
 
-    if (!status && !notes) {
+    if (!status && !notes && !responseMessage && !responseBrochureUrls) {
       return NextResponse.json(
         { error: "No fields to update" },
         { status: 400 }
       );
     }
 
-    const updated = await updateClientRequest(id, { status, notes });
+    const updated = await updateClientRequest(id, {
+      status,
+      notes,
+      responseMessage,
+      responseBrochureUrls,
+      respondedAt: responseMessage || responseBrochureUrls ? new Date() : undefined,
+    });
     return NextResponse.json(updated);
   } catch (error) {
     console.error("[API] Error updating client request:", error);

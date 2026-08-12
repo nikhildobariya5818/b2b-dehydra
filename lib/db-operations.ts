@@ -103,6 +103,8 @@ export async function createClientRequest(data: {
   interestedProducts: string;
   estimatedVolume?: string;
   message: string;
+  requestType?: string;
+  productId?: string;
 }) {
   try {
     const result = await db.insert(clientRequestsTable).values(data).returning();
@@ -141,6 +143,9 @@ export async function updateClientRequest(
   data: Partial<{
     status: string;
     notes: string;
+    responseMessage?: string;
+    responseBrochureUrls?: string;
+    respondedAt?: Date;
   }>
 ) {
   try {

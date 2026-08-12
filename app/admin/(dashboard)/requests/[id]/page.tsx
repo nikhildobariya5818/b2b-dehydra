@@ -13,6 +13,8 @@ export default function RequestDetailPage() {
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
+  const [responseMessage, setResponseMessage] = useState("");
+  const [responseBrochureUrls, setResponseBrochureUrls] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -28,6 +30,8 @@ export default function RequestDetailPage() {
       setRequest(data);
       setStatus(data.status);
       setNotes(data.notes || "");
+      setResponseMessage(data.responseMessage || "");
+      setResponseBrochureUrls(data.responseBrochureUrls || "");
     } catch (err) {
       setError("Failed to load request details");
       console.error(err);
@@ -44,7 +48,7 @@ export default function RequestDetailPage() {
       const response = await fetch(`/api/client-requests/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, notes }),
+        body: JSON.stringify({ status, notes, responseMessage, responseBrochureUrls }),
       });
 
       if (!response.ok) throw new Error("Failed to update");
@@ -199,13 +203,22 @@ export default function RequestDetailPage() {
               />
             </div>
 
+            <div className="form-group">
+              <label htmlFor="responseMessage">Response message</label>
+              <textarea id="responseMessage" value={responseMessage} onChange={(e) => setResponseMessage(e.target.value)} rows={6} placeholder="Write the brochure or sample response for the client..." disabled={isSaving} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="responseBrochureUrls">Brochure links</label>
+              <textarea id="responseBrochureUrls" value={responseBrochureUrls} onChange={(e) => setResponseBrochureUrls(e.target.value)} rows={4} placeholder="Paste one public brochure URL per line" disabled={isSaving} />
+            </div>
             <div className="form-actions">
               <button type="submit" className="btn btn-primary" disabled={isSaving}>
                 {isSaving ? "Saving..." : "Update Request"}
               </button>
-              <Link href="/admin/requests" className="btn btn-secondary">
-                Back
-              </Link>
+              <a className="btn btn-secondary" href={`mailto:${request.email}?subject=${encodeURIComponent(`Response to your ${request.requestType || "product"} request`)}&body=${encodeURIComponent(`${responseMessage}\n\n${responseBrochureUrls}`)}`}>
+                Email client
+              </a>
+              <Link href="/admin/requests" className="btn btn-secondary">Back</Link>
             </div>
           </form>
         </div>
