@@ -6,7 +6,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
-  return { title: `${product.name} | De'Hydra Foods`, description: product.description };
+  return {
+    title: product.name,
+    description: product.description,
+    alternates: { canonical: `/products/${product.slug}` },
+    openGraph: { title: product.name, description: product.description, type: "article", images: product.imageUrl ? [product.imageUrl] : undefined },
+  };
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {

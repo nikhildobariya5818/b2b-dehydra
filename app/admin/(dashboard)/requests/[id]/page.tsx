@@ -14,6 +14,8 @@ export default function RequestDetailPage() {
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isSendingBrochure, setIsSendingBrochure] = useState(false);
+  const [sendMessage, setSendMessage] = useState("");
 
   useEffect(() => {
     fetchRequest();
@@ -63,6 +65,22 @@ export default function RequestDetailPage() {
 
   if (loading) {
     return <div className="admin-header"><p>Loading...</p></div>;
+  }
+
+  async function sendBrochure() {
+    setIsSendingBrochure(true);
+    setSendMessage("");
+    try {
+      const response = await fetch(`/api/client-requests/${id}/send-brochure`, { method: "POST" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to send brochure");
+      setSendMessage("Brochure email sent successfully.");
+      setStatus("responded");
+    } catch (err) {
+      setSendMessage(err instanceof Error ? err.message : "Unable to send brochure.");
+    } finally {
+      setIsSendingBrochure(false);
+    }
   }
 
   if (!request) {
@@ -170,6 +188,13 @@ export default function RequestDetailPage() {
 
         <div className="form-container">
           <h2>Manage Request</h2>
+          <div className="form-actions" style={{ marginBottom: "20px" }}>
+            <button type="button" className="btn btn-primary" onClick={sendBrochure} disabled={isSendingBrochure}>
+              {isSendingBrochure ? "Sending brochure..." : "Send brochure by email"}
+            </button>
+            <a className="btn btn-secondary" href={`mailto:${request.email}?subject=${encodeURIComponent("Re: De'Hydra Foods request")}&body=${encodeURIComponent(`Hello ${request.contactName},\\n\\n`)}`}>Quick chat by email</a>
+          </div>
+          {sendMessage && <p className={sendMessage.includes("successfully") ? "form-message success" : "form-message error"}>{sendMessage}</p>}
           <form onSubmit={handleUpdate} className="form-group" style={{ margin: 0 }}>
             <div className="form-group">
               <label htmlFor="status">Status *</label>

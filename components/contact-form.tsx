@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Icon } from "./icon";
 
 interface Product {
@@ -10,6 +11,10 @@ interface Product {
 }
 
 export function ContactForm() {
+  const searchParams = useSearchParams();
+  const requestedProduct = searchParams.get("product") || "";
+  const requestIntent = searchParams.get("intent") || "general";
+  const intentLabel = requestIntent === "sample" ? "Sample request" : requestIntent === "brochure" ? "Brochure request" : "Business inquiry";
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [products, setProducts] = useState<Product[]>([]);
   const [formData, setFormData] = useState({
@@ -19,8 +24,8 @@ export function ContactForm() {
     phone: "",
     industry: "",
     estimatedVolume: "",
-    interestedProducts: "",
-    message: "",
+    interestedProducts: requestedProduct,
+    message: requestedProduct ? `${intentLabel} for ${requestedProduct}. ` : "",
   });
 
   useEffect(() => {
@@ -78,6 +83,11 @@ export function ContactForm() {
         <span>Enterprise inquiry</span>
         <b>Fields marked * are required</b>
       </div>
+      <label className="sr-only" aria-hidden="true">
+        Website
+        <input name="website" tabIndex={-1} autoComplete="off" />
+      </label>
+      {requestedProduct && <p className="form-context">Request type: <strong>{intentLabel}</strong> · Product: <strong>{requestedProduct}</strong></p>}
       <div className="form-grid">
         <label>
           Full name *

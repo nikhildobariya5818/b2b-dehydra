@@ -27,10 +27,17 @@ export async function POST(req: NextRequest) {
       interestedProducts,
       estimatedVolume,
       message,
+      website,
     } = body;
 
+    // Honeypot field: bots should never populate this hidden input.
+    if (website) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const emailIsValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalizedEmail);
+
     // Validation
-    if (!companyName || !contactName || !email || !industry || !interestedProducts || !message) {
+    if (!companyName || !contactName || !emailIsValid || !industry || !interestedProducts || !message) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -40,8 +47,8 @@ export async function POST(req: NextRequest) {
     const clientRequest = await createClientRequest({
       companyName,
       contactName,
-      email,
-      phone: phone || undefined,
+      email: normalizedEmail,
+      phone: phone ? String(phone).trim().slice(0, 20) : undefined,
       industry,
       interestedProducts, // Should be JSON string array
       estimatedVolume: estimatedVolume || undefined,

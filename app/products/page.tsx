@@ -5,8 +5,10 @@ import { CTA, PageHero, SectionTitle } from "@/components/ui";
 import { getAllProducts } from "@/lib/db-operations";
 
 export const metadata = {
-  title: "Products | De'Hydra Foods",
-  description: "Browse our complete range of premium dehydrated food ingredients",
+  title: "Industrial Dehydrated Food Ingredients",
+  description: "Browse De'Hydra Foods' premium dehydrated potato and food ingredients for global manufacturing, private label, and export supply.",
+  alternates: { canonical: "/products" },
+  openGraph: { title: "Industrial Dehydrated Food Ingredients", description: "Premium ingredients for global food manufacturing." },
 };
 
 async function getProducts() {
