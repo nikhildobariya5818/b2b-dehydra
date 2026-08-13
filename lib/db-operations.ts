@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "./db";
-import { productsTable, clientRequestsTable, brochuresTable, facilitiesTable } from "./schema";
+import { productsTable, clientRequestsTable, brochuresTable, facilitiesTable, requestEventsTable } from "./schema";
 import { eq } from "drizzle-orm";
 
 // ========== PRODUCTS ==========
@@ -106,6 +106,16 @@ export async function createClientRequest(data: {
   interestedProducts: string;
   estimatedVolume?: string;
   message: string;
+  requestType?: string;
+  productId?: string;
+  brochureId?: string;
+  source?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  referrer?: string;
+  landingPage?: string;
+  consentAt?: Date;
 }) {
   try {
     const result = await db.insert(clientRequestsTable).values(data).returning();
@@ -114,6 +124,15 @@ export async function createClientRequest(data: {
     console.error("[DB] Error creating client request:", error);
     throw error;
   }
+}
+
+export async function createRequestEvent(requestId: string, eventType: string, metadata?: Record<string, unknown>) {
+  const result = await db.insert(requestEventsTable).values({ requestId, eventType, metadata }).returning();
+  return result[0];
+}
+
+export async function getRequestEvents(requestId: string) {
+  return db.select().from(requestEventsTable).where(eq(requestEventsTable.requestId, requestId)).orderBy(requestEventsTable.createdAt);
 }
 
 export async function getAllClientRequests() {

@@ -14,6 +14,9 @@ export default function RequestDetailPage() {
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [brochureUrl, setBrochureUrl] = useState("");
+  const [brochureName, setBrochureName] = useState("product-brochure.pdf");
+  const [isSendingBrochure, setIsSendingBrochure] = useState(false);
 
   useEffect(() => {
     fetchRequest();
@@ -58,6 +61,26 @@ export default function RequestDetailPage() {
       console.error(err);
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  async function sendBrochure() {
+    if (!brochureUrl) return;
+    setIsSendingBrochure(true);
+    try {
+      const response = await fetch(`/api/client-requests/${id}/send-brochure`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ brochureUrl, brochureName }),
+      });
+      if (!response.ok) throw new Error("Failed to send brochure");
+      alert("Brochure sent successfully");
+      setRequest((current: any) => ({ ...current, status: "responded" }));
+    } catch (err) {
+      setError("Failed to send brochure");
+      console.error(err);
+    } finally {
+      setIsSendingBrochure(false);
     }
   }
 
@@ -170,6 +193,17 @@ export default function RequestDetailPage() {
 
         <div className="form-container">
           <h2>Manage Request</h2>
+          <div className="form-group" style={{ borderTop: "1px solid #ddd", paddingTop: "20px" }}>
+            <h3>Send brochure</h3>
+            <label htmlFor="brochure-url">Public brochure URL</label>
+            <input id="brochure-url" type="url" value={brochureUrl} onChange={(e) => setBrochureUrl(e.target.value)} placeholder="https://.../brochure.pdf" />
+            <label htmlFor="brochure-name">Attachment filename</label>
+            <input id="brochure-name" value={brochureName} onChange={(e) => setBrochureName(e.target.value)} />
+            <button type="button" className="btn btn-primary" onClick={sendBrochure} disabled={isSendingBrochure || !brochureUrl}>
+              {isSendingBrochure ? "Sending..." : "Email brochure"}
+            </button>
+          </div>
+
           <form onSubmit={handleUpdate} className="form-group" style={{ margin: 0 }}>
             <div className="form-group">
               <label htmlFor="status">Status *</label>

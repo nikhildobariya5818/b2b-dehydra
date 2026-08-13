@@ -93,6 +93,17 @@ export const clientRequestsTable = pgTable("client_requests", {
   interestedProducts: text("interested_products").notNull(),
   estimatedVolume: varchar("estimated_volume", { length: 50 }),
   message: text("message").notNull(),
+  requestType: varchar("request_type", { length: 40 }).default("inquiry").notNull(),
+  productId: uuid("product_id"),
+  brochureId: uuid("brochure_id"),
+  source: varchar("source", { length: 100 }),
+  utmSource: varchar("utm_source", { length: 200 }),
+  utmMedium: varchar("utm_medium", { length: 200 }),
+  utmCampaign: varchar("utm_campaign", { length: 200 }),
+  referrer: text("referrer"),
+  landingPage: text("landing_page"),
+  consentAt: timestamp("consent_at"),
+  lastContactedAt: timestamp("last_contacted_at"),
   status: varchar("status", { length: 20 }).default("new").notNull(),
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -100,6 +111,14 @@ export const clientRequestsTable = pgTable("client_requests", {
 });
 
 // Brochures table
+export const requestEventsTable = pgTable("request_events", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  requestId: uuid("request_id").notNull(),
+  eventType: varchar("event_type", { length: 60 }).notNull(),
+  metadata: json("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const brochuresTable = pgTable("brochures", {
   id: uuid("id").defaultRandom().primaryKey(),
   productId: uuid("product_id").notNull(),

@@ -48,6 +48,11 @@ export function ContactForm() {
           estimatedVolume: formData.estimatedVolume || undefined,
           interestedProducts: formData.interestedProducts,
           message: formData.message,
+          requestType: "inquiry",
+          source: "contact-form",
+          referrer: document.referrer || undefined,
+          landingPage: window.location.href,
+          consent: true,
         }),
       });
 

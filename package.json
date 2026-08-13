@@ -25,6 +25,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-leaflet": "^5.0.0",
+    "resend": "^6.19.0",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
   },
